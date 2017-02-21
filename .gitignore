@@ -3,6 +3,7 @@
 *.slo
 *.lo
 *.o
+*.obj
 *.a
 *.la
 *.lai
@@ -24,6 +25,9 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *build-*
+release/
+debug/
+tmp/
 
 # QtCreator
 
@@ -35,4 +39,7 @@ Makefile*
 
 # QtCtreator CMake
 CMakeLists.txt.user
+
+# Windows
+Thumbs.db
 
