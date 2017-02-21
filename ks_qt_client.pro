@@ -10,9 +10,12 @@ TEMPLATE = app
 MOC_DIR = tmp/moc
 OBJECTS_DIR = tmp/obj
 RCC_DIR = tmp/rcc
-UI_DIR = tmp/ui
+win32:UI_DIR = tmp/ui
+mac:UI_DIR = ../../src/
 
 TRANSLATIONS = i18n/ks_ru.ts
+
+QMAKE_MAC_SDK = macosx10.12
 
 
 SOURCES += main.cpp\
