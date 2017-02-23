@@ -1,4 +1,5 @@
-QT += core gui network
+QT += core gui network svg
+QTPLUGIN += qsvg
 
 greaterThan(QT_MAJOR_VERSION, 4) {
 	QT += widgets
@@ -16,7 +17,6 @@ mac:UI_DIR = ../../src/
 TRANSLATIONS = i18n/ks_ru.ts
 
 QMAKE_MAC_SDK = macosx10.12
-
 
 SOURCES += main.cpp\
 	src/mainwindow.cpp \
@@ -36,5 +36,4 @@ HEADERS	+= src/mainwindow.h \
 
 FORMS += src/mainwindow.ui
 
-RESOURCES += \
-	resources.qrc
+RESOURCES += resources.qrc

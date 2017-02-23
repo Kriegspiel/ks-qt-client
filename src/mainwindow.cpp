@@ -1,4 +1,3 @@
-#include <QLabel>
 #include <QPainter>
 #include <QDebug>
 

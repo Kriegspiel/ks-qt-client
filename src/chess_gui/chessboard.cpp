@@ -17,8 +17,8 @@ QList<ChessBoard::Field> ChessBoard::getAvalibleTurnes(AbstractFigure* figure, i
 	{
 		case PAWN: {
 			int max = 2;
-			if(side == BLACK && row == 1 ||
-			   side == WHITE && row == ROWS-2)
+			if((side == BLACK && row == 1) ||
+			   (side == WHITE && row == ROWS-2))
 				max = 3;
 
 			for (int var = 1; var < max; ++var)
@@ -181,14 +181,7 @@ void ChessBoard::dropEvent(QDropEvent* event)
 		return;
 	}
 
-	QByteArray itemData = event->mimeData()->data(mimeFormat);
-	QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-
-	QPixmap pixmap;
-	QPoint offset;
-	dataStream >> pixmap >> offset;
-
-	selectedFigure->setPixmap(pixmap);
+	QPoint offset;	
 
 	// Move figure
 	QPoint p = event->pos() - offset;
@@ -280,7 +273,7 @@ void ChessBoard::mousePressEvent(QMouseEvent* event)
 
 void ChessBoard::startDragEvent(const QPointF &pos, Figure* figure)
 {
-	QPixmap pixmap = *figure->pixmap();
+	QPixmap pixmap = figure->pixmap();
 
 	QByteArray itemData;
 	QDataStream dataStream(&itemData, QIODevice::WriteOnly);
