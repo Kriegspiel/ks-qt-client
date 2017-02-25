@@ -1,36 +1,6 @@
 #include <QDebug>
 #include "figure.h"
 
-#define CASE(x) case x: return #x;
-
-QString Figure::playerSide2str(PlayerSide type) const
-{
-	switch(type)
-	{
-		CASE(BLACK)
-		CASE(WHITE)
-
-		default:
-			throw tr("Unknown player Side (%1)").arg(type);
-	}
-}
-
-QString Figure::figureType2str(FigureType type) const
-{
-	switch(type)
-	{
-		CASE(PAWN)
-		CASE(ROOK)
-		CASE(KNIGHT)
-		CASE(BISHOP)
-		CASE(QUEEN)
-		CASE(KING)
-
-		default:
-			throw QString("Unknown pieceType2s(%1)").arg(type);
-	}
-}
-
 QString Figure::resPath(const QString &ext)
 {
 	QString s = playerSide2str(Side()).toLower();
@@ -64,19 +34,8 @@ void Figure::paintEvent(QPaintEvent *)
         p.drawPixmap(QPoint(0,0), pixmap_);
 }
 
-QDebug operator<<(QDebug debug, const Figure &f)
-{
-	QDebugStateSaver saver(debug);
-	debug << "id:" << f.Id()
-		  << f.figureType2str(f.Type())
-		  << f.posStr();
-
-	return debug;
-}
-
 Figure::Figure(QWidget* parent, PlayerSide side, FigureType type, int row, int col)
-	: QWidget((QWidget *)parent), AbstractFigure(side, type),
-	  m_row(row), m_col(col)
+	: QWidget((QWidget *)parent), AbstractFigure(side, type, row, col)
 {
 	initPixmap(size());
 	setAttribute(Qt::WA_DeleteOnClose);

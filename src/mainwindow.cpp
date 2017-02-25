@@ -28,7 +28,7 @@ void MainWindow::setupUI()
 	ui->versionLabel->setStyleSheet("background: transparent");
 	ui->lastMoves->setStyleSheet("background: white");
 
-	connect(ui->chessBoard, SIGNAL(moveFinished(QString)), this, SLOT(addStringToHistory(QString)));
+	connect(ui->chessBoard, SIGNAL(historyUpdated(QString)), this, SLOT(addStringToHistory(QString)));
 }
 
 void MainWindow::loadConfig()

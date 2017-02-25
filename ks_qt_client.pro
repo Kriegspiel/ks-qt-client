@@ -20,19 +20,19 @@ QMAKE_MAC_SDK = macosx10.12
 
 SOURCES += main.cpp\
 	src/mainwindow.cpp \
-	src/chess/abstract_board.cpp \
 	src/chess/abstract_figure.cpp \
 	src/chess_gui/figure.cpp \
-	src/chess_gui/chessboard.cpp
+	src/chess_gui/chessboard.cpp \
+    src/chess/abstract_chess.cpp
 
 HEADERS	+= src/mainwindow.h \
 	src/common/config.h \
 	src/chess/rules.h \
-	src/chess/abstract_board.h \
 	src/chess/abstract_figure.h \
 	src/chess_gui/chessboard.h \
 	src/chess_gui/figure.h \
-	src/chess_gui/chessboard.h
+	src/chess_gui/chessboard.h \
+    src/chess/abstract_chess.h
 
 FORMS += src/mainwindow.ui
 
