@@ -23,7 +23,8 @@ SOURCES += main.cpp\
 	src/chess/abstract_figure.cpp \
 	src/chess_gui/figure.cpp \
 	src/chess_gui/chessboard.cpp \
-    src/chess/abstract_chess.cpp
+    src/chess/abstract_chess.cpp \
+    src/chess/common_rules_chess.cpp
 
 HEADERS	+= src/mainwindow.h \
 	src/common/config.h \
@@ -32,7 +33,8 @@ HEADERS	+= src/mainwindow.h \
 	src/chess_gui/chessboard.h \
 	src/chess_gui/figure.h \
 	src/chess_gui/chessboard.h \
-    src/chess/abstract_chess.h
+    src/chess/abstract_chess.h \
+    src/chess/common_rules_chess.h
 
 FORMS += src/mainwindow.ui
 

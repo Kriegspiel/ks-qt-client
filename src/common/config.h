@@ -16,7 +16,7 @@
 // Version
 #define MAJOR 0
 #define MINOR 1
-#define RELEASE 0
+#define RELEASE 1
 
 #define MS(y) #y // make string
 #define VERSIONSTRING(a,b,c) MS(a) "." MS(b) "." MS(c)

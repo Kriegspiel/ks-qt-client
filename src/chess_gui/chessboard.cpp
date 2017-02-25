@@ -251,13 +251,14 @@ void ChessBoard::figureSelectedAt(int row, int col)
 	}
 }
 
-void ChessBoard::figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, bool will_eat)
+void ChessBoard::figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, AbstractFigure *attacked_figure)
 {
 	Figure *figure = (Figure *)figureAt(src_row, src_col);
 	if (figure)
 	{
 		QString from = figure->posStr();
 		QString to = Figure::pos2Str(dst_row, dst_col);
+		bool will_eat = (attacked_figure != NULL);
 		emit historyUpdated(QString("%1: %2%4%3")
 						  .arg((figure->Side() == WHITE)?tr("White"):tr("Black"))
 						  .arg(from).arg(to).arg(will_eat? tr("x"):"—"));
@@ -284,7 +285,7 @@ void ChessBoard::figureDeselected()
 ChessBoard::ChessBoard(QWidget* parent)
 	: QWidget(parent),
 	  boardRect(QRectF(0.0, 0.0, 80.0, 80.0)), cellSize(10.0),
-	  AbstractChess()
+	  CommonRulesChess()
 {
 	setAcceptDrops(true);
 }

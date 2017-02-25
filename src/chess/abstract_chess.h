@@ -43,7 +43,7 @@ protected:
 	virtual void initFigure(PlayerSide side, FigureType type, int row, int col);
 	virtual void figureSelectedAt(int row, int col) = 0;
 	virtual void figureDeselected() = 0;
-	virtual void figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, bool will_eat) = 0;
+	virtual void figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, AbstractFigure *attacked_figure) = 0;
 	virtual void hideFigureAt(int row, int col) = 0;
 
 	MoveStatus avalibleMoveStatus(int row, int col) { return avalibleMoves[row][col]; }
@@ -52,8 +52,7 @@ protected:
 
 protected:
 	// Properties
-	AbstractFigure* boardMap[8][8];
-	QList<Field> avalibleMoviesList;
+	AbstractFigure* boardMap[ROWS][COLS];
 	bool fieldsUnderAttack[ROWS][COLS];
 	MoveStatus avalibleMoves[ROWS][COLS];
 	AbstractFigure *selectedFigure;
@@ -64,15 +63,9 @@ protected:
 	void deselectFigure();
 
 	// Help functions
-	virtual QList<Field> getAvalibleMoves(AbstractFigure *piece, int row, int col);
-	void clearAvailableMoves();
+	virtual void updateAvalibleMoviesMap();
 
 	MoveStatus getFieldStatus(int row, int col, PlayerSide side);
-	void fillFieldsUnderAttack(PlayerSide side);
-
-	QList<Field> getDiagonalStatus(int row, int col, PlayerSide side);
-	QList<Field> getHorVerStatus(int row, int col, PlayerSide side);
-	QList<Field> getStatusNear(int row, int col, PlayerSide side, int d_r, int d_c);
 
 public:
 	// Load from file

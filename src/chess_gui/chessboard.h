@@ -6,10 +6,10 @@
 #include <QBrush>
 #include <QList>
 
-#include "../chess/abstract_chess.h"
+#include "../chess/common_rules_chess.h"
 #include "figure.h"
 
-class ChessBoard : public QWidget, public AbstractChess
+class ChessBoard : public QWidget, public CommonRulesChess
 {
 	Q_OBJECT
 
@@ -30,7 +30,7 @@ private:
 protected:
 	virtual void initFigure(PlayerSide side, FigureType type, int row, int col);
 	virtual void figureSelectedAt(int row, int col);
-	virtual void figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, bool will_eat);
+	virtual void figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, AbstractFigure *attacked_figure);
 	virtual void hideFigureAt(int row, int col);
 	virtual void figureDeselected();
 
