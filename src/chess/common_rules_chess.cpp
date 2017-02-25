@@ -53,6 +53,9 @@ QList<AbstractChess::Field> CommonRulesChess::getAvalibleMoves(AbstractFigure* f
 			if ((st = getFieldStatus(near_row, col - 1, side)) == ATTACK_MOVE)
 				avalibale_movies.append(Field (near_row, col - 1, st));
 
+			if (canEatEnPassant &&
+				qAbs(col - cellToEatEnPassant.y()) == 1 && near_row == cellToEatEnPassant.x())
+				avalibale_movies.append(Field (near_row, cellToEatEnPassant.y(), ATTACK_MOVE));
 			break;
 		}
 
@@ -129,6 +132,34 @@ void CommonRulesChess::clearAvalibleMoviesMap()
 	for (int row = 0; row < ROWS; row++)
 		for (int col = 0; col < COLS; col++)
 			avalibleMoves[row][col] = INCORRECT_MOVE;
+}
+
+void CommonRulesChess::updateGameStatus(AbstractFigure *figure, int old_row, int old_col)
+{
+	canEatEnPassant = false;
+	if (figure->Type() == KING)
+		canDoRoque[figure->Type()][ROQUE_LEFT] = canDoRoque[figure->Type()][ROQUE_RIGHT] = false;
+	else if (figure->Type() == ROOK)
+		canDoRoque[figure->Type()][((old_col==0)?ROQUE_LEFT:ROQUE_RIGHT)] = false;
+	else if (figure->Type() == PAWN && qAbs(figure->Row() - old_row) == 2)
+	{
+		canEatEnPassant = true;
+		cellToEatEnPassant = QPoint((figure->Row() + old_row)/2, old_col);
+	}
+}
+
+AbstractFigure *CommonRulesChess::attackedFigure(AbstractFigure *figure, int row, int col)
+{
+	int attacked_row = row;
+	if (figure->Type() == PAWN)
+	{
+		if (canEatEnPassant && cellToEatEnPassant == QPoint(row, col))
+		{
+			attacked_row = figure->Row();
+		}
+	}
+
+	return boardMap[attacked_row][col];
 }
 
 QList<AbstractChess::Field> CommonRulesChess::getDiagonalStatus(int row, int col, PlayerSide side)
@@ -221,6 +252,8 @@ void CommonRulesChess::fillFieldsUnderAttack(PlayerSide side)
 
 CommonRulesChess::CommonRulesChess()
 {
-
+	canEatEnPassant = false;
+	canDoRoque[BLACK][ROQUE_LEFT] = canDoRoque[BLACK][ROQUE_RIGHT] = true;
+	canDoRoque[WHITE][ROQUE_LEFT] = canDoRoque[WHITE][ROQUE_RIGHT] = true;
 }
 

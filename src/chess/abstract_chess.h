@@ -64,6 +64,8 @@ protected:
 
 	// Help functions
 	virtual void updateAvalibleMoviesMap();
+	virtual void updateGameStatus(AbstractFigure *figure, int old_row, int old_col) { Q_UNUSED(figure); Q_UNUSED(old_row); Q_UNUSED(old_col);}
+	virtual AbstractFigure *attackedFigure(AbstractFigure *figure, int row, int col) { Q_UNUSED(figure); return boardMap[row][col]; }
 
 	MoveStatus getFieldStatus(int row, int col, PlayerSide side);
 

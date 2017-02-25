@@ -27,20 +27,29 @@ void AbstractChess::moveSelectedFigure(int row, int col)
 {
 	if (avalibleMoves[row][col] != INCORRECT_MOVE)
 	{
-		AbstractFigure *attacked_figure = boardMap[row][col];
+		int old_row = selectedFigure->Row();
+		int old_col = selectedFigure->Col();
+		AbstractFigure *attacked_figure = attackedFigure(selectedFigure, row, col);
 		bool will_eat = (attacked_figure != NULL);
 		if (will_eat)
-			hideFigureAt(row, col);
+		{
+			qDebug() << "Eat figure:" << *attacked_figure;
+			hideFigureAt(attacked_figure->Row(), attacked_figure->Col());
+			boardMap[attacked_figure->Row()][attacked_figure->Col()] = NULL;
+		}
 
 		qDebug() << "Move figure" << *selectedFigure << "to" << AbstractFigure::pos2Str(row, col);
-		boardMap[selectedFigure->Row()][selectedFigure->Col()] = NULL;
 		figureMovedFromTo(selectedFigure->Row(), selectedFigure->Col(),
 						  row, col, attacked_figure);
+		boardMap[old_row][old_col] = NULL;
 
 		selectedFigure->setRow(row);
 		selectedFigure->setCol(col);
 		boardMap[row][col] = selectedFigure;
+
+		updateGameStatus(selectedFigure, old_row, old_col);
 		deselectFigure();
+
 		return;
 	}
 }

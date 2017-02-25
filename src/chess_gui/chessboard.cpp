@@ -259,9 +259,10 @@ void ChessBoard::figureMovedFromTo(int src_row, int src_col, int dst_row, int ds
 		QString from = figure->posStr();
 		QString to = Figure::pos2Str(dst_row, dst_col);
 		bool will_eat = (attacked_figure != NULL);
+
 		emit historyUpdated(QString("%1: %2%4%3")
-						  .arg((figure->Side() == WHITE)?tr("White"):tr("Black"))
-						  .arg(from).arg(to).arg(will_eat? tr("x"):"—"));
+				  .arg((figure->Side() == WHITE)?tr("White"):tr("Black"))
+				  .arg(from).arg(to).arg(will_eat? tr("x"):"—"));
 
 		moveFigure(figure, dst_row, dst_col);
 		update();
