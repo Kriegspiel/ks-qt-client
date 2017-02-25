@@ -22,7 +22,7 @@ void MainWindow::setupUI()
 	ui->setupUi(this);
 	setWindowTitle(Config::ProgramName);
 	ui->versionLabel->setText("ver. " + Config::Version);
-	this->setStyleSheet("background-image: url(:/res/wooden-texture-bg.jpeg)");
+	ui->centralWidget->setStyleSheet("background-image: url(:/res/wooden-texture-bg.jpeg)");
 
 	ui->historyLabel->setStyleSheet("background: transparent");
 	ui->versionLabel->setStyleSheet("background: transparent");

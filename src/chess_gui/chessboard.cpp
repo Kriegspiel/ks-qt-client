@@ -234,9 +234,8 @@ void ChessBoard::mousePressEvent(QMouseEvent* event)
 					if (will_eat)
 						((Figure *)boardMap[row][col])->hide();
 
-					QString from = QString("%1%2").arg(QString('a'+selectedFigure->Col())).
-								   arg(QString('0'+selectedFigure->Row()));
-					QString to = QString("%1%2").arg(QString('a'+col)).arg(QString('0'+row));
+					QString from = selectedFigure->posStr();
+					QString to = Figure::pos2Str(row, col);
 					emit moveFinished(QString("%1: %2%4%3")
 									  .arg((selectedFigure->Side() == WHITE)?tr("White"):tr("Black"))
 									  .arg(from).arg(to).arg(will_eat? tr("x"):"—"));
@@ -258,13 +257,13 @@ void ChessBoard::mousePressEvent(QMouseEvent* event)
 		return;
 
 	selectedFigure = figure;
-	qDebug() << "Selected figure:" << figure->Id() << "row:" << figure->Row() << "col:" << figure->Col();
+	qDebug() << "Selected figure:" << *figure;
 
 	avalibleMoviesList = getAvalibleTurnes(selectedFigure, figure->Row(), figure->Col());
 	foreach (Field a, avalibleMoviesList)
 	{
 		avalibleMoves[a.row][a.col] = a.status;
-		qDebug() << "Can go to:" << a.row << a.col << a.status;
+		qDebug() << "Can go to:" << Figure::pos2Str(a.row, a.col) << a.status;
 		update();
 	}
 

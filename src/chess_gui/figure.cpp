@@ -3,7 +3,8 @@
 
 #define CASE(x) case x: return #x;
 
-QString Figure::playerSide2str(PlayerSide type) {
+QString Figure::playerSide2str(PlayerSide type) const
+{
 	switch(type)
 	{
 		CASE(BLACK)
@@ -14,7 +15,7 @@ QString Figure::playerSide2str(PlayerSide type) {
 	}
 }
 
-QString Figure::figureType2str(FigureType type)
+QString Figure::figureType2str(FigureType type) const
 {
 	switch(type)
 	{
@@ -61,6 +62,16 @@ void Figure::paintEvent(QPaintEvent *)
     QPainter p (this);
     if (!pixmap_.isNull())
         p.drawPixmap(QPoint(0,0), pixmap_);
+}
+
+QDebug operator<<(QDebug debug, const Figure &f)
+{
+	QDebugStateSaver saver(debug);
+	debug << "id:" << f.Id()
+		  << f.figureType2str(f.Type())
+		  << f.posStr();
+
+	return debug;
 }
 
 Figure::Figure(QWidget* parent, PlayerSide side, FigureType type, int row, int col)
