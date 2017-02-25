@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>KS client</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">;</string>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <property name="font">
     <font>
@@ -20,7 +23,7 @@
      <pointsize>10</pointsize>
     </font>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,0">
     <property name="spacing">
      <number>15</number>
     </property>
@@ -55,9 +58,20 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="historyLabel">
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="text">
          <string>History:</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -68,6 +82,21 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>150</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="autoFillBackground">
+         <bool>false</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="lineWidth">
+         <number>1</number>
         </property>
        </widget>
       </item>
@@ -105,15 +134,6 @@
    </widget>
    <addaction name="menu"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="saveAction">
    <property name="text">
     <string>Сохранить игру</string>

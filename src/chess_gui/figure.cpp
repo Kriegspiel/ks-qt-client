@@ -70,5 +70,5 @@ Figure::Figure(QWidget* parent, PlayerSide side, FigureType type, int row, int c
 	initPixmap(size());
 	setAttribute(Qt::WA_DeleteOnClose);
     setStyleSheet("background:transparent;");
-	setCursor(Qt::OpenHandCursor);
+	setCursor(Qt::PointingHandCursor);
 }

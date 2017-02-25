@@ -13,5 +13,6 @@
         <file>res/queen-white.svg</file>
         <file>res/rook-black.svg</file>
         <file>res/rook-white.svg</file>
+        <file>res/wooden-texture-bg.jpeg</file>
     </qresource>
 </RCC>
