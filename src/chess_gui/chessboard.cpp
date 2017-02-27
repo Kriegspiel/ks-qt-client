@@ -267,6 +267,7 @@ void ChessBoard::figureMovedFromTo(int src_row, int src_col, int dst_row, int ds
 		moveFigure(figure, dst_row, dst_col);
 		update();
 	}
+	CommonRulesChess::figureMovedFromTo(src_row, src_col, dst_row, dst_col, NULL);
 }
 
 void ChessBoard::hideFigureAt(int row, int col)

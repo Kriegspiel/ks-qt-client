@@ -8,11 +8,15 @@ class CommonRulesChess : public AbstractChess
 	enum RoqueType { ROQUE_LEFT = 0, ROQUE_RIGHT };
 protected:
 	virtual void updateAvalibleMoviesMap();
+	virtual void figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, AbstractFigure *attacked_figure);
 
 private:
 	bool canEatEnPassant;
 	QPoint cellToEatEnPassant;
+
 	bool canDoRoque[2][2];
+	QList<QPoint> cellsToDoRoque;
+	bool canMoveRoque(AbstractFigure *rook_figure, int *king_target_col, bool skip_attack_fields_update = true);
 
 	QList<Field> getAvalibleMoves(AbstractFigure *piece);
 	void clearAvalibleMoviesMap();

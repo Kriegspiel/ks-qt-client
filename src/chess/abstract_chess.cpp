@@ -38,7 +38,7 @@ void AbstractChess::moveSelectedFigure(int row, int col)
 			boardMap[attacked_figure->Row()][attacked_figure->Col()] = NULL;
 		}
 
-		qDebug() << "Move figure" << *selectedFigure << "to" << AbstractFigure::pos2Str(row, col);
+		qDebug() << "Move figure:" << *selectedFigure << "to" << AbstractFigure::pos2Str(row, col);
 		figureMovedFromTo(selectedFigure->Row(), selectedFigure->Col(),
 						  row, col, attacked_figure);
 		boardMap[old_row][old_col] = NULL;

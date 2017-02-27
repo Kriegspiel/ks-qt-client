@@ -16,6 +16,78 @@ void CommonRulesChess::updateAvalibleMoviesMap()
 	}
 }
 
+void CommonRulesChess::figureMovedFromTo(int src_row, int src_col, int dst_row, int dst_col, AbstractFigure *attacked_figure)
+{
+	Q_UNUSED(attacked_figure);
+
+	AbstractFigure *f = figureAt(src_row, src_col);
+	// roque
+	if (f != NULL && f->Type() == KING && cellsToDoRoque.contains(QPoint(dst_row, dst_col)))
+	{
+		int rook_src_col = (dst_col < src_col) ? 0 : COLS-1;
+		int rook_dst_col = (dst_col < src_col) ? src_col-1 : src_col+1;
+		AbstractFigure *rook = figureAt(src_row, rook_src_col);
+		if (rook == NULL)
+		{
+			qDebug() << "Error in common rules chess: try to move rook for roque, but cannot find it at" <<
+						AbstractFigure::pos2Str(src_row, rook_src_col);
+			return;
+		}
+		figureMovedFromTo(src_row, rook_src_col, dst_row, rook_dst_col, NULL); // move rook in gui
+
+		boardMap[src_row][rook_src_col] = NULL;
+		rook->setRow(dst_row);
+		rook->setCol(rook_dst_col);
+		boardMap[dst_row][rook_dst_col] = rook;
+	}
+}
+
+bool CommonRulesChess::canMoveRoque(AbstractFigure *rook_figure, int *king_target_col, bool skip_attack_fields_update)
+{
+	if (rook_figure == NULL || rook_figure->Type() != ROOK)
+		return false;
+	int row = (rook_figure->Side() == BLACK ? 0 : ROWS-1);
+	bool ok = false;
+	if (rook_figure->Row() == row) // check that stayes on correct place and wasn't moved
+	{
+		if (rook_figure->Col() == 0)
+			ok = canDoRoque[rook_figure->Side()][0];
+		else if (rook_figure->Col() == COLS-1)
+			ok = canDoRoque[rook_figure->Side()][1];
+	}
+	if (!ok)
+		return false;
+
+	// check figures between king ang rook
+	AbstractFigure *king = figureAt(rook_figure->Row(), 4);
+	if (!king)
+	{
+		qDebug() << "Error in coomon chess: cannot find king for roque check at " <<
+					AbstractFigure::pos2Str(rook_figure->Row(), 4);
+		return false;
+	}
+	int min_col = qMin(rook_figure->Col(), king->Col()) + 1;
+	int max_col = qMax(rook_figure->Col(), king->Col()) - 1;
+	for (int c = min_col; c <= max_col; ++c)
+	{
+		qDebug() << "check col" << c << min_col << max_col;
+		if (figureAt(rook_figure->Row(), c) != NULL)
+			return false;
+	}
+	if (!skip_attack_fields_update)
+		fillFieldsUnderAttack(rook_figure->Side());
+	for (int c = min_col-1; c <= max_col+1; ++c)
+	{
+		if (fieldsUnderAttack[rook_figure->Row()][c])
+		{
+			return false;
+		}
+	}
+
+	*king_target_col = (rook_figure->Col() == 0) ? min_col + 1 : max_col;
+	return true;
+}
+
 QList<AbstractChess::Field> CommonRulesChess::getAvalibleMoves(AbstractFigure* figure)
 {
 	QList<Field> avalibale_movies;
@@ -116,6 +188,19 @@ QList<AbstractChess::Field> CommonRulesChess::getAvalibleMoves(AbstractFigure* f
 					avalibale_movies.append(Field(r, c, st));
 			}
 
+			int r_col = -1;
+			cellsToDoRoque.clear();
+			if (canMoveRoque(figureAt(figure->Row(), 0), &r_col, true))
+			{
+				avalibale_movies.append(Field(row, r_col, CORRECT_MOVE));
+				cellsToDoRoque.append(QPoint(row, r_col));
+			}
+			if (canMoveRoque(figureAt(figure->Row(), COLS-1), &r_col, true))
+			{
+				avalibale_movies.append(Field(row, r_col, CORRECT_MOVE));
+				cellsToDoRoque.append(QPoint(row, r_col));
+			}
+
 			break;
 		}
 
@@ -137,10 +222,12 @@ void CommonRulesChess::clearAvalibleMoviesMap()
 void CommonRulesChess::updateGameStatus(AbstractFigure *figure, int old_row, int old_col)
 {
 	canEatEnPassant = false;
+	cellToEatEnPassant = QPoint(-1, -1);
+	cellsToDoRoque.clear();
 	if (figure->Type() == KING)
-		canDoRoque[figure->Type()][ROQUE_LEFT] = canDoRoque[figure->Type()][ROQUE_RIGHT] = false;
+		canDoRoque[figure->Side()][ROQUE_LEFT] = canDoRoque[figure->Side()][ROQUE_RIGHT] = false;
 	else if (figure->Type() == ROOK)
-		canDoRoque[figure->Type()][((old_col==0)?ROQUE_LEFT:ROQUE_RIGHT)] = false;
+		canDoRoque[figure->Side()][((old_col==0)?ROQUE_LEFT:ROQUE_RIGHT)] = false;
 	else if (figure->Type() == PAWN && qAbs(figure->Row() - old_row) == 2)
 	{
 		canEatEnPassant = true;
@@ -225,6 +312,10 @@ void CommonRulesChess::fillFieldsUnderAttack(PlayerSide side)
 							if (getFieldStatus(row + r, col + c, side) == CORRECT_MOVE)
 								fields_under_attack_list.append(Field(row + r, col + c, ATTACK_MOVE));
 						}
+				}
+				else if (figure->Type() == ROOK)
+				{
+					fields_under_attack_list.append(getHorVerStatus(figure->Row(), figure->Col(), figure->Side()));
 				}
 				else if (figure->Type() == PAWN)
 				{
